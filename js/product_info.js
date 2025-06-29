@@ -1,4 +1,4 @@
-import { fetchmovies, title } from "./api.js";
+import { fetchmovie, title } from "./api.js";
 import { error } from "./error.js";
 
 async function createMovieHtml() {
@@ -8,39 +8,40 @@ async function createMovieHtml() {
     const movieWrapper = document.querySelector(".product_specific");
     const titleContainer = document.querySelector("#title");
     const getLoaderDiv = document.querySelector(".loader");
-    getLoaderDiv.classList.remove("loader");
 
-    let createSizeOptions = `<option value="0">Select size</option>`;
+    if (getLoaderDiv) getLoaderDiv.classList.remove("loader");
 
-    for (let i = 0; i < movieDetails.sizes.length; i++) {
-      titleContainer.textContent = movieWrapper.innerHTML = title;
-
-      createSizeOptions +=
-        `<option value=` +
-        movieDetails.sizes[i] +
-        `">` +
-        movieDetails.sizes[i] +
-        `</option>`;
-
-      movieWrapper.innerHTML = `
-                                <div class="movie">
-                                     <a href="product_info.html?id=${movie.id}&title=${movie.name}" class="movieImage">
-                                     <img src="${movie.images[0].src}" alt="${movie.images[0].alt}"></a>
-                                     <p class="movieText">${movie.name} </p>
-                                     <p class="movieText"><span class="movieSale">${movie.prices.regular_price} kr</span> <span class="discount">${movie.prices.sale_price} kr</span></p>
-                                     <a href="product_info.html?id=${movie.id}&title=${movie.name}" class="cta-button">Add to cart</a>
-                                   </div>`;
-
-      if (!movieDetails.onSale) {
-        const hideDiscount = document.querySelector(".hideDiscount");
-        hideDiscount.style.display = "none";
-      }
-
-      if (movieDetails.onSale) {
-        const getSaleSpan = document.querySelector(".sales");
-        getSaleSpan.classList.add("movieSale");
-      }
+    if (!movieWrapper || !titleContainer) {
+      console.error("Required container elements are missing.");
+      return;
     }
+
+    titleContainer.textContent = title;
+
+ movieWrapper.innerHTML = `
+  <div class="movie">
+    <img src="${movieDetails.images[0]?.src}" alt="${movieDetails.name}" />
+    <h1>${movieDetails.name}</h1>
+    <p>${movieDetails.description}</p>
+    <p><strong>Price:</strong> ${movieDetails.prices?.regular_price} kr</p>
+    ${
+      movieDetails.on_sale
+        ? `<p class="discount"><strong>Sale:</strong> ${movieDetails.prices?.sale_price} kr</p>`
+        : ""
+    }
+
+    <button class="cta-button" 
+        data-id="${movieDetails.id}" 
+        data-title="${movieDetails.name}" 
+        data-price="${movieDetails.prices?.regular_price}" 
+        data-discount="${movieDetails.prices?.sale_price}" 
+        data-onsale="${movieDetails.on_sale}" 
+        data-image="${movieDetails.images[0]?.src}">
+      Add to cart
+    </button>
+  </div>
+`;
+
   } catch (e) {
     console.error(e);
     error();

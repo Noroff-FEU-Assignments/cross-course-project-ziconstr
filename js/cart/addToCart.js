@@ -1,5 +1,3 @@
-import { fetchmovies } from "../api.js";
-
 function saveCart(key, value) {
   const jsonValue = JSON.stringify(value);
   localStorage.setItem(key, jsonValue);
@@ -7,31 +5,32 @@ function saveCart(key, value) {
 
 function loadCart(key) {
   const jsonValue = localStorage.getItem(key);
-  return JSON.parse(jsonValue);
+  return JSON.parse(jsonValue) || [];
 }
 
 function onAddToCart(event) {
   const button = event.target;
-  const movietId = button.dataset.id;
-  const movietPrice = button.dataset.price;
-  const movietTitle = button.dataset.title;
-  const movietSale = button.dataset.onsale;
-  const movietImage = button.dataset.image;
-  const movietDiscount = button.dataset.discount;
 
-  let item = {
-    id: movietId,
-    title: movietTitle,
-    price: movietPrice,
-    discount: movietDiscount,
-    onSale: movietSale,
-    image: movietImage,
+  const movieId = button.dataset.id;
+  const moviePrice = button.dataset.price;
+  const movieTitle = button.dataset.title;
+  const movieSale = button.dataset.onsale;
+  const movieImage = button.dataset.image;
+  const movieDiscount = button.dataset.discount;
+
+  const item = {
+    id: movieId,
+    title: movieTitle,
+    price: moviePrice,
+    discount: movieDiscount,
+    onSale: movieSale,
+    image: movieImage,
     qty: 1,
   };
 
-  let cart = loadCart("cart") || [];
+  const cart = loadCart("cart");
 
-  const itemInCart = cart.find((item) => item.id === movietId);
+  const itemInCart = cart.find((item) => item.id === movieId);
 
   if (itemInCart) {
     itemInCart.qty++;
@@ -42,21 +41,23 @@ function onAddToCart(event) {
   saveCart("cart", cart);
 
   const popUp = document.querySelector(".popup");
-  const closeBtn = document.querySelector(".close");
-
-  popUp.style.display = "block";
-  popUp.addEventListener("click", () => {
-    popUp.style.display = "none";
-  });
+  if (popUp) {
+    popUp.style.display = "block";
+    popUp.addEventListener("click", () => {
+      popUp.style.display = "none";
+    });
+  }
 }
 
-async function addToCart() {
-  const moviet = await fetchmoviet();
+function addToCart() {
+  const addButton = document.querySelector("button[data-id]");
 
-  const getAddToCartBtn = document.querySelector(
-    "button[data-id][data-price][data-discount][data-title][data-onsale][data-image]"
-  );
-  getAddToCartBtn.addEventListener("click", onAddToCart);
+  if (!addButton) {
+    console.warn("No Add to Cart button found");
+    return;
+  }
+
+  addButton.addEventListener("click", onAddToCart);
 }
 
 addToCart();
