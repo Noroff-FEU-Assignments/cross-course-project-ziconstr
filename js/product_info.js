@@ -1,50 +1,44 @@
-import { fetchmovie, title } from "./api.js";
+
+import { fetchmovies } from "./api.js";
 import { error } from "./error.js";
 
 async function createMovieHtml() {
   try {
-    const movieDetails = await fetchmovie();
+    const movies = await fetchmovies();
+    const queryString = document.location.search;
+    const params = new URLSearchParams(queryString);
+    const id = params.get("id");
+
+    const movieDetails = movies.find(movie => movie.id == id);
+
+    if (!movieDetails) {
+      throw new Error("Movie not found");
+    }
 
     const movieWrapper = document.querySelector(".product_specific");
     const titleContainer = document.querySelector("#title");
     const getLoaderDiv = document.querySelector(".loader");
-
     if (getLoaderDiv) getLoaderDiv.classList.remove("loader");
 
-    if (!movieWrapper || !titleContainer) {
-      console.error("Required container elements are missing.");
-      return;
+    let createSizeOptions = `<option value="0">Select size</option>`;
+
+    for (let i = 0; i < 4; i++) {
+      createSizeOptions += `<option value="${i + 1}">Size ${i + 1}</option>`;
     }
 
-    titleContainer.textContent = title;
+    movieWrapper.innerHTML = `
+      <div>
+        <h2>${movieDetails.name}</h2>
+        <img src="${movieDetails.images[0]?.src}" alt="${movieDetails.name}" />
+        <p>${movieDetails.description}</p>
+        <p>Price: $${movieDetails.prices.price}</p>
+        <select>${createSizeOptions}</select>
+      </div>
+    `;
+    titleContainer.innerText = movieDetails.name;
 
- movieWrapper.innerHTML = `
-  <div class="movie">
-    <img src="${movieDetails.images[0]?.src}" alt="${movieDetails.name}" />
-    <h1>${movieDetails.name}</h1>
-    <p>${movieDetails.description}</p>
-    <p><strong>Price:</strong> ${movieDetails.prices?.regular_price} kr</p>
-    ${
-      movieDetails.on_sale
-        ? `<p class="discount"><strong>Sale:</strong> ${movieDetails.prices?.sale_price} kr</p>`
-        : ""
-    }
-
-    <button class="cta-button" 
-        data-id="${movieDetails.id}" 
-        data-title="${movieDetails.name}" 
-        data-price="${movieDetails.prices?.regular_price}" 
-        data-discount="${movieDetails.prices?.sale_price}" 
-        data-onsale="${movieDetails.on_sale}" 
-        data-image="${movieDetails.images[0]?.src}">
-      Add to cart
-    </button>
-  </div>
-`;
-
-  } catch (e) {
-    console.error(e);
-    error();
+  } catch (err) {
+    error(err.message);
   }
 }
 
