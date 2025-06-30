@@ -1,3 +1,5 @@
+![alt text](image.png)
+
 
 # 🎬 SquareEyes – Cross-Course Project
 
@@ -29,13 +31,6 @@ This project fetches product (movie) data from a live WordPress WooCommerce REST
 - **WooCommerce API Endpoint:** [https://www.nadstarr.com/wp-json/wc/store/products](https://www.nadstarr.com/wp-json/wc/store/products)
 
 ---
-
-## 🔐 Admin Access (Noroff)
-
-- **Admin URL:** https://nadstarr.com/wp-admin
-- **Username:** `Noroff`
-- **Password:** `#Noreg@FET23`
-
 ---
 
 ## ✅ Requirements Met
