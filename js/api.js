@@ -1,6 +1,6 @@
 // js/api.js
 
-const API_URL = "http://zico-jan23ftsite.local/wp-json/wc/store/products";
+const API_URL = "http://nadstarr.com/wp-json/wc/store/products";
 
 export async function fetchAllProducts() {
   const response = await fetch(API_URL);
