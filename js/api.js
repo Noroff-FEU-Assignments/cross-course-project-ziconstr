@@ -1,21 +1,19 @@
-// api.js
+// js/api.js
 
-const API_BASE = "https://nadstarr.com/wp-json/wc/store/products";
+const API_URL = "http://zico-jan23ftsite.local/wp-json/wc/store/products";
 
 export async function fetchAllProducts() {
-  const response = await fetch(`${API_BASE}`);
+  const response = await fetch(API_URL);
   if (!response.ok) {
     throw new Error("Failed to fetch products");
   }
-  const data = await response.json();
-  return data.data;
+  return await response.json();
 }
 
 export async function fetchProductById(id) {
-  const response = await fetch(`${API_BASE}/${id}`);
+  const response = await fetch(`${API_URL}/${id}`);
   if (!response.ok) {
     throw new Error("Failed to fetch product");
   }
-  const data = await response.json();
-  return data.data;
+  return await response.json();
 }

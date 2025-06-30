@@ -1,7 +1,8 @@
+// js/products.js
 import { fetchAllProducts } from './api.js';
 
-async function displayProducts() {
-  const container = document.getElementById('products-container');
+async function displayAllProducts() {
+  const container = document.getElementById('all-products');
   container.innerHTML = '<p>Loading...</p>';
 
   try {
@@ -9,26 +10,34 @@ async function displayProducts() {
     container.innerHTML = '';
 
     products.forEach(product => {
-      const card = document.createElement('div');
-      card.classList.add('movie-card');
+  const regularPrice = parseFloat(product.prices.regular_price) / 100;
+  const salePrice = parseFloat(product.prices.sale_price) / 100;
+  const isOnSale = product.on_sale;
 
-      card.innerHTML = `
-        <a href="product.html?id=${product.id}">
-          <img src="${product.image.url}" alt="${product.image.alt}" />
-          <div class="info">
-            <h3>${product.title}</h3>
-            <p>$${product.discountedPrice}</p>
-          </div>
-        </a>
-      `;
+  const card = document.createElement('div');
+  card.classList.add('product-card');
 
-      container.appendChild(card);
-    });
+  card.innerHTML = `
+    <a href="product.html?id=${product.id}">
+      <img src="${product.images[0]?.src}" alt="${product.name}">
+    </a>
+    <h3>${product.name}</h3>
+    ${isOnSale ? '<span class="badge">SALE!</span>' : ''}
+    <div class="price">
+      <del>$${regularPrice.toFixed(2)}</del>
+      <ins>$${(isOnSale ? salePrice : regularPrice).toFixed(2)}</ins>
+    </div>
+    <button class="cta-button" data-id="${product.id}">Add to cart</button>
+  `;
+
+  container.appendChild(card);
+});
+
 
   } catch (error) {
     console.error(error);
-    container.innerHTML = '<p>Failed to load products.</p>';
+    container.innerHTML = '<p>Could not load movies.</p>';
   }
 }
 
-displayProducts();
+displayAllProducts();
