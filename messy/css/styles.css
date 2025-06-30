@@ -1,4 +1,5 @@
 @import "ui.css";
+@import "product-card.css";
 :root{
     --bg-color1:white;
     --bg-color2:black;
@@ -253,7 +254,7 @@ main{
 
 .container {
 	position: relative;
-	margin-top: 0px;
+	margin-top: auto;
 	margin-inline: auto;
 
 }
@@ -432,8 +433,7 @@ main{
     border-radius: 5px; 
 }
 
-.footer{
-	margin-top: auto;
+.footer {
 	background:#000;
 	padding:15px;
 	font-family: 'Play', sans-serif;
@@ -1125,4 +1125,28 @@ input{
 
 main {
   flex: 1;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background: #f9f9f9;
+}
+
+h1 {
+  color: #333;
+}
+
+.product {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.product img {
+  max-width: 150px;
+  display: block;
+  margin-bottom: 10px;
 }
