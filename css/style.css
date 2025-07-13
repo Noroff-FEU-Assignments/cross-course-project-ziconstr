@@ -694,3 +694,20 @@ button {
   color: #ffc900;
   margin-bottom: 0.5rem;
 }
+
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  background: #333; 
+  color: #fff;       
+  margin: 1rem 0;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.cart-item h3,
+.cart-item p {
+  color: #fff; 
+}
